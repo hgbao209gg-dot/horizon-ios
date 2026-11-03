@@ -286,22 +286,29 @@ pub use horizon_client_core::key_display::display_name;
 
 /// A key event: what the layout writes on its key, without modifiers, names
 /// that key from now on (`key_display::learn_layout`), so an AZERTY player's
-/// Q key shows A.
+/// Q key shows A. iOS learns nothing: `key_without_modifiers` is winit's
+/// desktop supplement and the screen's keyboard hands over text already typed,
+/// so the key names keep the table's own.
 pub fn learn_layout(event: &winit::event::KeyEvent) {
-    use winit::keyboard::{Key, PhysicalKey};
-    use winit::platform::modifier_supplement::KeyEventExtModifierSupplement;
-    let PhysicalKey::Code(code) = event.physical_key else {
-        return;
-    };
-    let Some(name) = key_name(code) else {
-        return;
-    };
-    let learn = horizon_client_core::key_display::learn_layout;
-    match event.key_without_modifiers() {
-        Key::Character(text) => learn(name, &text),
-        Key::Dead(Some(c)) => learn(name, c.encode_utf8(&mut [0; 4])),
-        _ => {}
+    #[cfg(not(target_os = "ios"))]
+    {
+        use winit::keyboard::{Key, PhysicalKey};
+        use winit::platform::modifier_supplement::KeyEventExtModifierSupplement;
+        let PhysicalKey::Code(code) = event.physical_key else {
+            return;
+        };
+        let Some(name) = key_name(code) else {
+            return;
+        };
+        let learn = horizon_client_core::key_display::learn_layout;
+        match event.key_without_modifiers() {
+            Key::Character(text) => learn(name, &text),
+            Key::Dead(Some(c)) => learn(name, c.encode_utf8(&mut [0; 4])),
+            _ => {}
+        }
     }
+    #[cfg(target_os = "ios")]
+    let _ = event;
 }
 
 /// Current bindings by mapping name.
