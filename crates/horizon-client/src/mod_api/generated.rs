@@ -4519,7 +4519,7 @@ pub trait Hooks: Send + Sync {
     /// A player is about to nock `bow` with `hand` (`BowItem.use`, NeoForge's
     /// `ArrowNockEvent`): `has_ammo` is whether `getProjectile` found ammunition
     /// or the player is in creative. Set `cancel` to fail the use.
-    /// @API:arrow_nock@.
+    /// 375.
     ///
     /// Return `Flow::Cancel` to take it: this sets `cancel`, and later mods are skipped.
     fn arrow_nock(&self, host: &mut dyn Host, event: &mut ArrowNockEvent<'_>) -> Flow {
@@ -4537,7 +4537,7 @@ pub trait Hooks: Send + Sync {
     /// statistic, no advancement and no heart particles, as NeoForge
     /// returns before `finalizeSpawnChildFromBreeding`. Not fired for
     /// turtles, frogs and sniffers (an egg, no baby), villagers or
-    /// armadillos' own paths. On the server. API @API:baby_entity_spawn@.
+    /// armadillos' own paths. On the server. API 395.
     ///
     /// Return `Flow::Cancel` to take it: this sets `cancel`, and later mods are skipped.
     fn baby_entity_spawn(&self, host: &mut dyn Host, event: &mut BabyEntitySpawnEvent<'_>) -> Flow {
@@ -4554,13 +4554,13 @@ pub trait Hooks: Send + Sync {
     /// without a message) to refuse. The spawn point is set before it fires,
     /// as in vanilla, only when vanilla found no problem. After it,
     /// `native_player_bed_enter` still fires and may cancel. Server-side.
-    /// API @API:can_player_sleep@.
+    /// API 393.
     fn can_player_sleep(&self, host: &mut dyn Host, event: &mut CanPlayerSleepEvent<'_>) {
         let _ = host;
         let _ = event;
     }
     /// Player FOV scale, after vanilla effects and before zoom and easing.
-    /// Invalid values or values outside 0.01..=10 revert to base. API @API:compute_fov_modifier@.
+    /// Invalid values or values outside 0.01..=10 revert to base. API 362.
     fn compute_fov_modifier(&self, host: &dyn Host, event: &mut ComputeFovModifierEvent<'_>) {
         let _ = host;
         let _ = event;
@@ -4571,7 +4571,7 @@ pub trait Hooks: Send + Sync {
     /// what is added to the entity's velocity; a player's client is sent the
     /// same. Wind bursts too, except dragons and end crystals. End crystals
     /// are also omitted from ordinary blasts: Horizon removes them without a
-    /// velocity to change. Server-side. @API:explosion_knockback@.
+    /// velocity to change. Server-side. 374.
     ///
     /// Every mod gets `event.knockback_velocity` in order and may add, change or remove knockback_velocity.
     fn explosion_knockback(&self, host: &mut dyn Host, event: &mut ExplosionKnockbackEvent<'_>) {
@@ -4583,7 +4583,7 @@ pub trait Hooks: Send + Sync {
     /// stack being matched, `accept` already true (the load-time list named
     /// the item). Set `accept` to false to refuse the stack — its components
     /// are the usual reason. The hook may be called many times a craft; the
-    /// answer must be the same for the same stack. API @API:ingredient_test@.
+    /// answer must be the same for the same stack. API 377.
     fn ingredient_test(&self, event: &mut IngredientTestEvent<'_>) {
         let _ = event;
     }
@@ -4595,7 +4595,7 @@ pub trait Hooks: Send + Sync {
     /// `native_item_container_insert`, `native_item_container_extract`, in
     /// `native_item_container.rs`). The contents are kept in the stack's
     /// `minecraft:container`, as a shulker box item keeps them.
-    /// API @API:item_container@.
+    /// API 370.
     ///
     /// Return `Some` to set `slots`; the first mod returning `Some` wins.
     fn item_container(&self, host: &dyn Host, event: &mut ItemContainerEvent<'_>) -> Option<u32> {
@@ -4614,7 +4614,7 @@ pub trait Hooks: Send + Sync {
     /// `LivingConversionEvent.Post`): `entity` is gone, `converted` took its
     /// place. Fires with `native_entity_transform`, after the new mob joined
     /// the level, for the conversions `native_living_conversion_pre` tells.
-    /// API @API:living_conversion_post@.
+    /// API 390.
     fn living_conversion_post(
         &self,
         host: &mut dyn Host,
@@ -4630,7 +4630,7 @@ pub trait Hooks: Send + Sync {
     /// lightning. `outcome` is the new type. Set `cancel` to keep the mob as
     /// it is; a drowning zombie starts its timers again. Not told: a
     /// mooshroom a player shears, a zombie villager's cure, a villager turned
-    /// by a zombie. API @API:living_conversion_pre@.
+    /// by a zombie. API 391.
     ///
     /// Return `Flow::Cancel` to take it: this sets `cancel`, and later mods are skipped.
     fn living_conversion_pre(
@@ -4650,7 +4650,7 @@ pub trait Hooks: Send + Sync {
     /// mob that dealt it, 0 for none or a player. Set `cancel` to keep it alive:
     /// Horizon decides death by health, so it stays at 1 health. The hook
     /// fires once per death attempt. Armor stands, boats and other non-mob
-    /// entities are not told. API @API:living_death@.
+    /// entities are not told. API 392.
     ///
     /// Return `Flow::Cancel` to take it: this sets `cancel`, and later mods are skipped.
     fn living_death(&self, host: &mut dyn Host, event: &mut LivingDeathEvent<'_>) -> Flow {
@@ -4663,7 +4663,7 @@ pub trait Hooks: Send + Sync {
     /// mob (`entity`, `kind`): a skeleton or illusioner's shot, or the crossbow
     /// load of a pillager or piglin. `projectile` is the vanilla
     /// ammunition; replace it to choose another. A replaced stack is not taken
-    /// from the inventory. @API:living_get_projectile@.
+    /// from the inventory. 376.
     ///
     /// Every mod gets `event.projectile` in order and may add, change or remove projectile.
     fn living_get_projectile(&self, host: &mut dyn Host, event: &mut LivingGetProjectileEvent<'_>) {
@@ -4676,7 +4676,7 @@ pub trait Hooks: Send + Sync {
     /// DamageSource position. The acting player's network id is `causing`
     /// (also the direct entity). Weapon enchantments include their levels.
     /// Runs after the victim's invulnerability check (an invulnerable or dead victim fires nothing) and before v1; cancellation refuses
-    /// delivery. Other damage routes still only fire v1. API @API:living_incoming_damage_v2@.
+    /// delivery. Other damage routes still only fire v1. API 384.
     ///
     /// Return `Flow::Cancel` to take it: this sets `canceled`, and later mods are skipped.
     fn living_incoming_damage_v2(
@@ -4695,7 +4695,7 @@ pub trait Hooks: Send + Sync {
     /// include the guest whose action runs. Includes mob melee and armor-stand sweeps, not
     /// direct velocity pushes (explosions, Punch arrows, hoglin throws). Non-finite changes
     /// are restored before resistance. Server-side, without self: damage borrows the victim.
-    /// API @API:living_knockback_v2@.
+    /// API 383.
     ///
     /// Return `Flow::Cancel` to take it: this sets `canceled`, and later mods are skipped.
     fn living_knockback_v2(&self, event: &mut LivingKnockbackV2Event<'_>) -> Flow {
@@ -4708,7 +4708,7 @@ pub trait Hooks: Send + Sync {
     /// size of the children (half of it) and `count` how many vanilla drew
     /// (2 to 4). A mod may change `count` (0 spawns none, at most 64) or set
     /// `cancel` to spawn no children. Only for a parent above size 1; the
-    /// split's random draw is made first. On the server. API @API:mob_split@.
+    /// split's random draw is made first. On the server. API 396.
     ///
     /// Return `Flow::Cancel` to take it: this sets `cancel`, and later mods are skipped.
     fn mob_split(&self, host: &mut dyn Host, event: &mut MobSplitEvent<'_>) -> Flow {
@@ -4725,7 +4725,7 @@ pub trait Hooks: Send + Sync {
     /// client prediction. `context` gives its dimension, position, instrument
     /// and old note; `new_note` starts as vanilla's cycled note. Set it to 0
     /// through 24; an out-of-range value keeps vanilla's. Cancel to leave the
-    /// note unchanged and prevent playback. API @API:native_note_block_change@.
+    /// note unchanged and prevent playback. API 387.
     ///
     /// Return `Flow::Cancel` to take it: this sets `cancel`, and later mods are skipped.
     fn note_block_change(
@@ -4740,7 +4740,7 @@ pub trait Hooks: Send + Sync {
     /// Possible natural spawns at a server position (NeoForge's
     /// `LevelEvent.PotentialSpawns`, `NaturalSpawner.mobsAt`). Mods may add or
     /// remove entries, or cancel to make the list empty.
-    /// @API:native_potential_spawns@.
+    /// 388.
     ///
     /// Return `Flow::Cancel` to take it: this sets `canceled`, and later mods are skipped.
     fn potential_spawns(&self, host: &dyn Host, event: &mut PotentialSpawnsEvent<'_>) -> Flow {
@@ -4750,7 +4750,7 @@ pub trait Hooks: Send + Sync {
     }
     /// A village siege found a spawn position on the server. Set `canceled`
     /// to stop the siege. There is one siege per dimension.
-    /// @API:native_village_siege@.
+    /// 389.
     ///
     /// Return `Flow::Cancel` to take it: this sets `canceled`, and later mods are skipped.
     fn village_siege(&self, host: &mut dyn Host, event: &mut VillageSiegeEvent<'_>) -> Flow {
@@ -4765,7 +4765,7 @@ pub trait Hooks: Send + Sync {
     /// an advancement reward gives nothing for a negative amount. Experience
     /// bottles and furnaces make orbs, so they come through the orb path.
     /// `native_player_exp_change` is separate and still fires first for an orb
-    /// pickup. Server-side. API @API:player_xp_change@.
+    /// pickup. Server-side. API 394.
     ///
     /// Return `Flow::Cancel` to take it: this sets `cancel`, and later mods are skipped.
     fn player_xp_change(&self, host: &mut dyn Host, event: &mut PlayerXpChangeEvent<'_>) -> Flow {
@@ -4783,7 +4783,7 @@ pub trait Hooks: Send + Sync {
     }
     /// Additional first-person hand and item pose, including empty arms and maps.
     /// Add offsets in blocks and pitch, yaw and roll in degrees; multiply scale.
-    /// API @API:render_hand_pose@.
+    /// API 369.
     fn render_hand_pose(&self, host: &dyn Host, event: &mut RenderHandPoseEvent<'_>) {
         let _ = host;
         let _ = event;
@@ -4800,7 +4800,7 @@ pub trait Hooks: Send + Sync {
         let _ = event;
         Flow::Continue
     }
-    /// Name tag visibility and optional replacement text. API @API:render_name_tag@.
+    /// Name tag visibility and optional replacement text. API 372.
     fn render_name_tag(&self, host: &dyn Host, event: &mut RenderNameTagEvent<'_>) {
         let _ = host;
         let _ = event;

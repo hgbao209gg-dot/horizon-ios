@@ -1214,7 +1214,7 @@ pub trait Host {
     }
     /// The entity's data as `/data get entity` shows it
     /// (`Entity.saveWithoutId`): its compound without `id`. An entity with no
-    /// UUID yet gets the one it will be saved with. API @API:entity_data@.
+    /// UUID yet gets the one it will be saved with. API 386.
     fn entity_nbt(&mut self, entity: EntityRef) -> Option<Compound> {
         let _ = entity;
         unimplemented!("Host::entity_nbt")
@@ -1224,34 +1224,34 @@ pub trait Host {
     /// changed. False for a player (vanilla refuses them too), a kind Horizon
     /// can't reload yet (only mobs, dropped items, armor stands and item
     /// frames), data nested too deep, or data that changes nothing. API
-    /// @API:entity_data@.
+    /// 386.
     fn entity_merge_nbt(&mut self, entity: EntityRef, nbt: Compound) -> bool {
         let _ = entity;
         let _ = nbt;
         unimplemented!("Host::entity_merge_nbt")
     }
     /// The entity's tags (`Entity.getTags`), as `/tag <entity> list` shows
-    /// them. API @API:entity_data@.
+    /// them. API 386.
     fn entity_tags(&self, entity: EntityRef) -> Option<Vec<String>> {
         let _ = entity;
         unimplemented!("Host::entity_tags")
     }
     /// Adds tag `tag` (`Entity.addTag`): false when it has it already, holds
-    /// 1024, its kind can't store tags yet, or the handle is stale. API @API:entity_data@.
+    /// 1024, its kind can't store tags yet, or the handle is stale. API 386.
     fn entity_add_tag(&mut self, entity: EntityRef, tag: &str) -> bool {
         let _ = entity;
         let _ = tag;
         unimplemented!("Host::entity_add_tag")
     }
     /// Removes tag `tag` (`Entity.removeTag`): false when it didn't have it.
-    /// API @API:entity_data@.
+    /// API 386.
     fn entity_remove_tag(&mut self, entity: EntityRef, tag: &str) -> bool {
         let _ = entity;
         let _ = tag;
         unimplemented!("Host::entity_remove_tag")
     }
     /// The entity's name as plain text (`Entity.getName`): its custom name,
-    /// a player's name, else its type's name. API @API:entity_data@.
+    /// a player's name, else its type's name. API 386.
     fn entity_name(&self, entity: EntityRef) -> Option<String> {
         let _ = entity;
         unimplemented!("Host::entity_name")
@@ -1259,50 +1259,50 @@ pub trait Host {
     /// The entity `id` (the id events carry) as a handle for the `entity_*`
     /// methods: None on a client, with no world open, or for no such entity
     /// in the level in place or among the server's players. API
-    /// @API:entity_handles@.
+    /// 373.
     fn entity(&self, id: u32) -> Option<EntityRef> {
         let _ = id;
         unimplemented!("Host::entity")
     }
     /// The level `dimension` (`minecraft:the_nether`) as a handle: None on a
     /// client, with no world open, or for a dimension the server hasn't
-    /// loaded. API @API:entity_handles@.
+    /// loaded. API 373.
     fn level(&self, dimension: &str) -> Option<LevelRef> {
         let _ = dimension;
         unimplemented!("Host::level")
     }
     /// The entity's position (`Entity.position`): its feet, the middle of
-    /// its box for a painting or an item frame. API @API:entity_handles@.
+    /// its box for a painting or an item frame. API 373.
     fn entity_position(&self, entity: EntityRef) -> Option<[f64; 3]> {
         let _ = entity;
         unimplemented!("Host::entity_position")
     }
     /// The block the entity's position is in (`Entity.blockPosition`). API
-    /// @API:entity_handles@.
+    /// 373.
     fn entity_block_position(&self, entity: EntityRef) -> Option<[i32; 3]> {
         let _ = entity;
         unimplemented!("Host::entity_block_position")
     }
     /// The entity's yaw and pitch in degrees (`Entity.getYRot`, `getXRot`); 0
-    /// for the kinds that don't turn. API @API:entity_handles@.
+    /// for the kinds that don't turn. API 373.
     fn entity_rotation(&self, entity: EntityRef) -> Option<[f32; 2]> {
         let _ = entity;
         unimplemented!("Host::entity_rotation")
     }
     /// The entity's type (`Entity.getType`): `minecraft:zombie`. API
-    /// @API:entity_handles@.
+    /// 373.
     fn entity_kind(&self, entity: EntityRef) -> Option<String> {
         let _ = entity;
         unimplemented!("Host::entity_kind")
     }
     /// The entity's UUID (`Entity.getUUID`), the one it is saved with; an
     /// entity that has none yet gets it now, as a new vanilla entity does.
-    /// API @API:entity_handles@.
+    /// API 373.
     fn entity_uuid(&mut self, entity: EntityRef) -> Option<u128> {
         let _ = entity;
         unimplemented!("Host::entity_uuid")
     }
-    /// The level the entity is in (`Entity.level`). API @API:entity_handles@.
+    /// The level the entity is in (`Entity.level`). API 373.
     fn entity_level(&self, entity: EntityRef) -> Option<LevelRef> {
         let _ = entity;
         unimplemented!("Host::entity_level")
@@ -1310,7 +1310,7 @@ pub trait Host {
     /// The entity's velocity in blocks a tick (`Entity.getDeltaMovement`). A
     /// player's is the move its client last reported (`getKnownMovement`); an
     /// entity Horizon doesn't simulate (a display, a painting) has none, so
-    /// zero. API @API:entity_motion@.
+    /// zero. API 379.
     fn entity_velocity(&self, entity: EntityRef) -> Option<[f64; 3]> {
         let _ = entity;
         unimplemented!("Host::entity_velocity")
@@ -1318,45 +1318,45 @@ pub trait Host {
     /// Sets the entity's velocity (`Entity.setDeltaMovement`); clients see it
     /// as they see the entity move. False for a player (its client moves
     /// it), an entity Horizon doesn't simulate, or a value that isn't finite.
-    /// API @API:entity_motion@.
+    /// API 379.
     fn entity_set_velocity(&mut self, entity: EntityRef, velocity: [f64; 3]) -> bool {
         let _ = entity;
         let _ = velocity;
         unimplemented!("Host::entity_set_velocity")
     }
     /// Whether the entity stands on a block (`Entity.onGround`). API
-    /// @API:entity_motion@.
+    /// 379.
     fn entity_on_ground(&self, entity: EntityRef) -> Option<bool> {
         let _ = entity;
         unimplemented!("Host::entity_on_ground")
     }
     /// The entity's box (`Entity.getBoundingBox`): its lowest and highest
     /// corner. None for the kinds whose box Horizon doesn't keep (displays,
-    /// markers, End crystals, the dragon). API @API:entity_motion@.
+    /// markers, End crystals, the dragon). API 379.
     fn entity_bounding_box(&self, entity: EntityRef) -> Option<[[f64; 3]; 2]> {
         let _ = entity;
         unimplemented!("Host::entity_bounding_box")
     }
     /// The height of the entity's eyes above its feet (`Entity.getEyeHeight`).
-    /// API @API:entity_motion@.
+    /// API 379.
     fn entity_eye_height(&self, entity: EntityRef) -> Option<f64> {
         let _ = entity;
         unimplemented!("Host::entity_eye_height")
     }
     /// Where the entity's eyes are (`Entity.getEyePosition`). API
-    /// @API:entity_motion@.
+    /// 379.
     fn entity_eye_position(&self, entity: EntityRef) -> Option<[f64; 3]> {
         let _ = entity;
         unimplemented!("Host::entity_eye_position")
     }
     /// The unit vector the entity looks along (`Entity.getViewVector`, from
-    /// its pitch and yaw). API @API:entity_motion@.
+    /// its pitch and yaw). API 379.
     fn entity_view_vector(&self, entity: EntityRef) -> Option<[f64; 3]> {
         let _ = entity;
         unimplemented!("Host::entity_view_vector")
     }
     /// The square of the distance from the entity's feet to `pos`
-    /// (`Entity.distanceToSqr`). API @API:entity_motion@.
+    /// (`Entity.distanceToSqr`). API 379.
     fn entity_distance_to_sqr(&self, entity: EntityRef, pos: [f64; 3]) -> Option<f64> {
         let _ = entity;
         let _ = pos;
@@ -1405,14 +1405,14 @@ pub trait Host {
     /// The block state at `pos` (`Level.getBlockState`) as `/setblock` takes
     /// it: `minecraft:oak_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]`.
     /// None for a chunk that isn't loaded or a `y` outside the world. API
-    /// @API:level_reads@.
+    /// 381.
     fn level_block_state(&self, level: LevelRef, pos: [i32; 3]) -> Option<String> {
         let _ = level;
         let _ = pos;
         unimplemented!("Host::level_block_state")
     }
     /// The block at `pos` without its properties: `minecraft:oak_stairs`.
-    /// None as for `block_state`. API @API:level_reads@.
+    /// None as for `block_state`. API 381.
     fn level_block(&self, level: LevelRef, pos: [i32; 3]) -> Option<String> {
         let _ = level;
         let _ = pos;
@@ -1420,7 +1420,7 @@ pub trait Host {
     }
     /// Property `key` of the block state at `pos` (`BlockState.getValue`):
     /// `east` for `facing`. None for a block without it, or as for
-    /// `block_state`. API @API:level_reads@.
+    /// `block_state`. API 381.
     fn level_block_property(&self, level: LevelRef, pos: [i32; 3], key: &str) -> Option<String> {
         let _ = level;
         let _ = pos;
@@ -1429,47 +1429,47 @@ pub trait Host {
     }
     /// Whether `pos` is inside the world's height and its chunk is loaded
     /// (`Level.isLoaded`, which is false outside `isInValidBounds`): a block
-    /// read or write there finds the world. API @API:level_reads@.
+    /// read or write there finds the world. API 381.
     fn level_is_loaded(&self, level: LevelRef, pos: [i32; 3]) -> bool {
         let _ = level;
         let _ = pos;
         unimplemented!("Host::level_is_loaded")
     }
     /// The lowest block `y` and the height of the level
-    /// (`LevelHeightAccessor.getMinY`, `getHeight`). API @API:level_reads@.
+    /// (`LevelHeightAccessor.getMinY`, `getHeight`). API 381.
     fn level_height(&self, level: LevelRef) -> Option<(i32, i32)> {
         let _ = level;
         unimplemented!("Host::level_height")
     }
     /// The ticks the server has run (`Level.getGameTime`), shared by every
-    /// level as in vanilla. API @API:level_reads@.
+    /// level as in vanilla. API 381.
     fn level_game_time(&self, level: LevelRef) -> Option<i64> {
         let _ = level;
         unimplemented!("Host::level_game_time")
     }
     /// The time of day in ticks (`Level.getOverworldClockTime`), shared by
-    /// every level; it keeps counting past 24000. API @API:level_reads@.
+    /// every level; it keeps counting past 24000. API 381.
     fn level_day_time(&self, level: LevelRef) -> Option<i64> {
         let _ = level;
         unimplemented!("Host::level_day_time")
     }
     /// The entity as a living entity (vanilla's `LivingEntity`: a mob, a
     /// player, an armor stand or the dragon), or None for another kind or a
-    /// stale handle. API @API:living_refs@.
+    /// stale handle. API 382.
     fn living(&self, entity: EntityRef) -> Option<LivingRef> {
         let _ = entity;
         unimplemented!("Host::living")
     }
     /// The stack in equipment slot `slot` (`LivingEntity.getItemBySlot`):
     /// None when it is empty, the entity has no such slot (a player has no
-    /// body or saddle slot), or the handle is stale. API @API:living_refs@.
+    /// body or saddle slot), or the handle is stale. API 382.
     fn living_equipment(&self, living: LivingRef, slot: EquipmentSlot) -> Option<ItemStack> {
         let _ = living;
         let _ = slot;
         unimplemented!("Host::living_equipment")
     }
     /// The stack in hand `hand` (`LivingEntity.getItemInHand`). API
-    /// @API:living_refs@.
+    /// 382.
     fn living_hand_item(&self, living: LivingRef, hand: Hand) -> Option<ItemStack> {
         let _ = living;
         let _ = hand;
@@ -1480,7 +1480,7 @@ pub trait Host {
     /// when the entity has no such slot: a player has no body or saddle
     /// slot, a horse no head slot, a zombie no body slot, the dragon none.
     /// Horizon keeps no mob saddle here yet, and a mob holds one item outside
-    /// its main hand, as `/item` does. API @API:living_refs@.
+    /// its main hand, as `/item` does. API 382.
     fn living_set_equipment(
         &mut self,
         living: LivingRef,
@@ -1497,19 +1497,19 @@ pub trait Host {
     /// layer, as `WorldDrawn::block_sprites` cuts them), where it lies on the side, how its texture runs across it,
     /// its tint source and whether it is cut out, translucent or animated; its particle sprite; whether it is a plain
     /// cube. None for a block the game does not know. The model is the state's first random variant. API
-    /// @API:native_block_sprites@.
+    /// 380.
     fn block_sprites(&self, blocks: &[&str]) -> Vec<Option<BlockSprites>> {
         let _ = blocks;
         unimplemented!("Host::block_sprites")
     }
     /// For a client mod: each texture's sprite by name (`minecraft:block/stone`, `block/stone`), none for one no
-    /// model uses. API @API:native_block_sprites@.
+    /// model uses. API 380.
     fn texture_sprites(&self, textures: &[&str]) -> Vec<Option<SpriteRef>> {
         let _ = textures;
         unimplemented!("Host::texture_sprites")
     }
     /// For a client mod: changes each time the resources load (a resource pack turned on or off can move every
-    /// sprite): ask `native_block_sprites` again then. API @API:native_block_sprites@.
+    /// sprite): ask `native_block_sprites` again then. API 380.
     fn block_sprites_version(&self) -> u64 {
         unimplemented!("Host::block_sprites_version")
     }
@@ -1524,7 +1524,7 @@ pub trait Host {
 impl EntityRef {
     /// The entity's data as `/data get entity` shows it
     /// (`Entity.saveWithoutId`): its compound without `id`. An entity with no
-    /// UUID yet gets the one it will be saved with. API @API:entity_data@.
+    /// UUID yet gets the one it will be saved with. API 386.
     pub fn nbt(self, host: &mut dyn Host) -> Option<Compound> {
         host.entity_nbt(self)
     }
@@ -1533,102 +1533,102 @@ impl EntityRef {
     /// changed. False for a player (vanilla refuses them too), a kind Horizon
     /// can't reload yet (only mobs, dropped items, armor stands and item
     /// frames), data nested too deep, or data that changes nothing. API
-    /// @API:entity_data@.
+    /// 386.
     pub fn merge_nbt(self, host: &mut dyn Host, nbt: Compound) -> bool {
         host.entity_merge_nbt(self, nbt)
     }
     /// The entity's tags (`Entity.getTags`), as `/tag <entity> list` shows
-    /// them. API @API:entity_data@.
+    /// them. API 386.
     pub fn tags(self, host: &dyn Host) -> Option<Vec<String>> {
         host.entity_tags(self)
     }
     /// Adds tag `tag` (`Entity.addTag`): false when it has it already, holds
-    /// 1024, its kind can't store tags yet, or the handle is stale. API @API:entity_data@.
+    /// 1024, its kind can't store tags yet, or the handle is stale. API 386.
     pub fn add_tag(self, host: &mut dyn Host, tag: &str) -> bool {
         host.entity_add_tag(self, tag)
     }
     /// Removes tag `tag` (`Entity.removeTag`): false when it didn't have it.
-    /// API @API:entity_data@.
+    /// API 386.
     pub fn remove_tag(self, host: &mut dyn Host, tag: &str) -> bool {
         host.entity_remove_tag(self, tag)
     }
     /// The entity's name as plain text (`Entity.getName`): its custom name,
-    /// a player's name, else its type's name. API @API:entity_data@.
+    /// a player's name, else its type's name. API 386.
     pub fn name(self, host: &dyn Host) -> Option<String> {
         host.entity_name(self)
     }
     /// The entity's position (`Entity.position`): its feet, the middle of
-    /// its box for a painting or an item frame. API @API:entity_handles@.
+    /// its box for a painting or an item frame. API 373.
     pub fn position(self, host: &dyn Host) -> Option<[f64; 3]> {
         host.entity_position(self)
     }
     /// The block the entity's position is in (`Entity.blockPosition`). API
-    /// @API:entity_handles@.
+    /// 373.
     pub fn block_position(self, host: &dyn Host) -> Option<[i32; 3]> {
         host.entity_block_position(self)
     }
     /// The entity's yaw and pitch in degrees (`Entity.getYRot`, `getXRot`); 0
-    /// for the kinds that don't turn. API @API:entity_handles@.
+    /// for the kinds that don't turn. API 373.
     pub fn rotation(self, host: &dyn Host) -> Option<[f32; 2]> {
         host.entity_rotation(self)
     }
     /// The entity's type (`Entity.getType`): `minecraft:zombie`. API
-    /// @API:entity_handles@.
+    /// 373.
     pub fn kind(self, host: &dyn Host) -> Option<String> {
         host.entity_kind(self)
     }
     /// The entity's UUID (`Entity.getUUID`), the one it is saved with; an
     /// entity that has none yet gets it now, as a new vanilla entity does.
-    /// API @API:entity_handles@.
+    /// API 373.
     pub fn uuid(self, host: &mut dyn Host) -> Option<u128> {
         host.entity_uuid(self)
     }
-    /// The level the entity is in (`Entity.level`). API @API:entity_handles@.
+    /// The level the entity is in (`Entity.level`). API 373.
     pub fn level(self, host: &dyn Host) -> Option<LevelRef> {
         host.entity_level(self)
     }
     /// The entity's velocity in blocks a tick (`Entity.getDeltaMovement`). A
     /// player's is the move its client last reported (`getKnownMovement`); an
     /// entity Horizon doesn't simulate (a display, a painting) has none, so
-    /// zero. API @API:entity_motion@.
+    /// zero. API 379.
     pub fn velocity(self, host: &dyn Host) -> Option<[f64; 3]> {
         host.entity_velocity(self)
     }
     /// Sets the entity's velocity (`Entity.setDeltaMovement`); clients see it
     /// as they see the entity move. False for a player (its client moves
     /// it), an entity Horizon doesn't simulate, or a value that isn't finite.
-    /// API @API:entity_motion@.
+    /// API 379.
     pub fn set_velocity(self, host: &mut dyn Host, velocity: [f64; 3]) -> bool {
         host.entity_set_velocity(self, velocity)
     }
     /// Whether the entity stands on a block (`Entity.onGround`). API
-    /// @API:entity_motion@.
+    /// 379.
     pub fn on_ground(self, host: &dyn Host) -> Option<bool> {
         host.entity_on_ground(self)
     }
     /// The entity's box (`Entity.getBoundingBox`): its lowest and highest
     /// corner. None for the kinds whose box Horizon doesn't keep (displays,
-    /// markers, End crystals, the dragon). API @API:entity_motion@.
+    /// markers, End crystals, the dragon). API 379.
     pub fn bounding_box(self, host: &dyn Host) -> Option<[[f64; 3]; 2]> {
         host.entity_bounding_box(self)
     }
     /// The height of the entity's eyes above its feet (`Entity.getEyeHeight`).
-    /// API @API:entity_motion@.
+    /// API 379.
     pub fn eye_height(self, host: &dyn Host) -> Option<f64> {
         host.entity_eye_height(self)
     }
     /// Where the entity's eyes are (`Entity.getEyePosition`). API
-    /// @API:entity_motion@.
+    /// 379.
     pub fn eye_position(self, host: &dyn Host) -> Option<[f64; 3]> {
         host.entity_eye_position(self)
     }
     /// The unit vector the entity looks along (`Entity.getViewVector`, from
-    /// its pitch and yaw). API @API:entity_motion@.
+    /// its pitch and yaw). API 379.
     pub fn view_vector(self, host: &dyn Host) -> Option<[f64; 3]> {
         host.entity_view_vector(self)
     }
     /// The square of the distance from the entity's feet to `pos`
-    /// (`Entity.distanceToSqr`). API @API:entity_motion@.
+    /// (`Entity.distanceToSqr`). API 379.
     pub fn distance_to_sqr(self, host: &dyn Host, pos: [f64; 3]) -> Option<f64> {
         host.entity_distance_to_sqr(self, pos)
     }
@@ -1637,39 +1637,39 @@ impl LevelRef {
     /// The block state at `pos` (`Level.getBlockState`) as `/setblock` takes
     /// it: `minecraft:oak_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]`.
     /// None for a chunk that isn't loaded or a `y` outside the world. API
-    /// @API:level_reads@.
+    /// 381.
     pub fn block_state(self, host: &dyn Host, pos: [i32; 3]) -> Option<String> {
         host.level_block_state(self, pos)
     }
     /// The block at `pos` without its properties: `minecraft:oak_stairs`.
-    /// None as for `block_state`. API @API:level_reads@.
+    /// None as for `block_state`. API 381.
     pub fn block(self, host: &dyn Host, pos: [i32; 3]) -> Option<String> {
         host.level_block(self, pos)
     }
     /// Property `key` of the block state at `pos` (`BlockState.getValue`):
     /// `east` for `facing`. None for a block without it, or as for
-    /// `block_state`. API @API:level_reads@.
+    /// `block_state`. API 381.
     pub fn block_property(self, host: &dyn Host, pos: [i32; 3], key: &str) -> Option<String> {
         host.level_block_property(self, pos, key)
     }
     /// Whether `pos` is inside the world's height and its chunk is loaded
     /// (`Level.isLoaded`, which is false outside `isInValidBounds`): a block
-    /// read or write there finds the world. API @API:level_reads@.
+    /// read or write there finds the world. API 381.
     pub fn is_loaded(self, host: &dyn Host, pos: [i32; 3]) -> bool {
         host.level_is_loaded(self, pos)
     }
     /// The lowest block `y` and the height of the level
-    /// (`LevelHeightAccessor.getMinY`, `getHeight`). API @API:level_reads@.
+    /// (`LevelHeightAccessor.getMinY`, `getHeight`). API 381.
     pub fn height(self, host: &dyn Host) -> Option<(i32, i32)> {
         host.level_height(self)
     }
     /// The ticks the server has run (`Level.getGameTime`), shared by every
-    /// level as in vanilla. API @API:level_reads@.
+    /// level as in vanilla. API 381.
     pub fn game_time(self, host: &dyn Host) -> Option<i64> {
         host.level_game_time(self)
     }
     /// The time of day in ticks (`Level.getOverworldClockTime`), shared by
-    /// every level; it keeps counting past 24000. API @API:level_reads@.
+    /// every level; it keeps counting past 24000. API 381.
     pub fn day_time(self, host: &dyn Host) -> Option<i64> {
         host.level_day_time(self)
     }
@@ -1677,12 +1677,12 @@ impl LevelRef {
 impl LivingRef {
     /// The stack in equipment slot `slot` (`LivingEntity.getItemBySlot`):
     /// None when it is empty, the entity has no such slot (a player has no
-    /// body or saddle slot), or the handle is stale. API @API:living_refs@.
+    /// body or saddle slot), or the handle is stale. API 382.
     pub fn equipment(self, host: &dyn Host, slot: EquipmentSlot) -> Option<ItemStack> {
         host.living_equipment(self, slot)
     }
     /// The stack in hand `hand` (`LivingEntity.getItemInHand`). API
-    /// @API:living_refs@.
+    /// 382.
     pub fn hand_item(self, host: &dyn Host, hand: Hand) -> Option<ItemStack> {
         host.living_hand_item(self, hand)
     }
@@ -1691,7 +1691,7 @@ impl LivingRef {
     /// when the entity has no such slot: a player has no body or saddle
     /// slot, a horse no head slot, a zombie no body slot, the dragon none.
     /// Horizon keeps no mob saddle here yet, and a mob holds one item outside
-    /// its main hand, as `/item` does. API @API:living_refs@.
+    /// its main hand, as `/item` does. API 382.
     pub fn set_equipment(
         self,
         host: &mut dyn Host,
