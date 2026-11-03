@@ -1,0 +1,66 @@
+name: ios build
+# Cross-builds the client for aarch64-apple-ios on a GitHub-hosted Mac and packages Payload/Horizon.app
+# into Horizon.ipa (packaging/ios/package.sh). The .ipa is unsigned: iOS only runs an app whose
+# provisioning profile names the device, and that profile is not this repository's to hold, so the
+# signature is the last step and happens outside CI. Nothing here has been run on an iPhone yet —
+# the game still has desktop-only paths in its windowing and renderer (docs/roadmap "phones and
+# browser"), so this job's first job is to be the compiler's oracle for that port.
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: The commit to build
+        type: string
+        required: false
+        default: ios-build
+  push:
+    branches:
+      - ios-build
+permissions:
+  contents: read
+concurrency:
+  # Only the newest push matters: a build is a queue nobody waits in twice.
+  group: ios-build-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    name: build ios-arm64
+    runs-on: macos-15
+    timeout-minutes: 60
+    env:
+      # The oldest iPhone the app claims to run on; the C in the dependency tree (mimalloc, ring) is
+      # compiled for it too.
+      IPHONEOS_DEPLOYMENT_TARGET: '13.0'
+      HORIZON_VERSION: 0.0.${{ github.run_number }}
+      BIN: target/aarch64-apple-ios/release
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: ios-arm64
+      # No default features: `controllers` is gilrs, which has no iOS backend. Audio is cpal's
+      # CoreAudio, which does.
+      - name: Build the client
+        run: cargo build --release --locked --target aarch64-apple-ios -p horizon-client --bin horizon-client --no-default-features --features audio
+      - name: Package Horizon.ipa
+        run: packaging/ios/package.sh "$BIN/horizon-client" "$HORIZON_VERSION" dist
+      - name: What the bundle holds
+        # A .ipa players are sent should not be empty, and should not carry a macOS layout.
+        run: |
+          unzip -l dist/Horizon.ipa
+          test -z "$(unzip -l dist/Horizon.ipa | grep -E '(^| )_+MACOSX|\._' || true)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: horizon-ios-arm64
+          path: dist/Horizon.ipa
+          if-no-files-found: error
+          retention-days: 14
