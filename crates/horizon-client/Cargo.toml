@@ -97,9 +97,10 @@ objc2 = "0.6"
 objc2-app-kit = { version = "0.3", default-features = false, features = ["std", "NSApplication", "NSResponder", "NSWindow", "NSScreen"] }
 objc2-foundation = { version = "0.3", default-features = false, features = ["std", "NSArray", "NSString"] }
 
-[target.'cfg(not(target_os = "macos"))'.dependencies]
+[target.'cfg(not(any(target_os = "macos", target_os = "ios", target_os = "visionos")))'.dependencies]
 # OpenGL (WGL on Windows, EGL on Linux), the last fallback, for GPUs with no Vulkan or
-# DirectX 12 driver (`graphicsApi`, graphics.rs).
+# DirectX 12 driver (`graphicsApi`, graphics.rs). Apple's systems present Metal, and the GL
+# stack's EGL and window-system bindings have no iOS backend to build against.
 wgpu = { version = "30.0.1", default-features = false, features = ["gles"] }
 
 [target.'cfg(windows)'.build-dependencies]

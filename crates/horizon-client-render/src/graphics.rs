@@ -192,7 +192,8 @@ impl GraphicsApi {
         GraphicsApi::OpenGl,
     ];
     /// The APIs this system offers, in the order the setting cycles through
-    /// them: DirectX 12 is Windows' third backend, and macOS has no choice.
+    /// them: DirectX 12 is Windows' third backend, and Apple's systems without
+    /// Windows have Metal alone.
     pub fn choices() -> &'static [GraphicsApi] {
         const WINDOWS: [GraphicsApi; 4] = [
             GraphicsApi::Auto,
@@ -202,11 +203,11 @@ impl GraphicsApi {
         ];
         const LINUX: [GraphicsApi; 3] =
             [GraphicsApi::Auto, GraphicsApi::Vulkan, GraphicsApi::OpenGl];
-        const MACOS: [GraphicsApi; 1] = [GraphicsApi::Auto];
+        const APPLE: [GraphicsApi; 1] = [GraphicsApi::Auto];
         if cfg!(windows) {
             &WINDOWS
-        } else if cfg!(target_os = "macos") {
-            &MACOS
+        } else if cfg!(any(target_os = "macos", target_os = "ios", target_os = "visionos")) {
+            &APPLE
         } else {
             &LINUX
         }
