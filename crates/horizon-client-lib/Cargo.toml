@@ -25,7 +25,6 @@ horizon-mcp = { path = "../horizon-mcp" }
 # The server thread ahead of the workers (MinecraftServer.spin's Thread.setPriority).
 horizon-optifine = { path = "../horizon-optifine" }
 horizon-threads = { path = "../horizon-threads" }
-horizon-hdr = { path = "../horizon-hdr" }
 horizon-world = { path = "../horizon-world" }
 horizon-protocol = { path = "../horizon-protocol" }
 # server.properties, eula.txt and the user lists, shared with horizon-server.
@@ -98,10 +97,16 @@ objc2 = "0.6"
 objc2-app-kit = { version = "0.3", default-features = false, features = ["std", "NSApplication", "NSResponder", "NSWindow", "NSScreen"] }
 objc2-foundation = { version = "0.3", default-features = false, features = ["std", "NSArray", "NSString"] }
 
-[target.'cfg(not(target_os = "macos"))'.dependencies]
+[target.'cfg(not(any(target_os = "macos", target_os = "ios", target_os = "visionos")))'.dependencies]
 # OpenGL (WGL on Windows, EGL on Linux), the last fallback, for GPUs with no Vulkan or
-# DirectX 12 driver (`graphicsApi`, graphics.rs).
+# DirectX 12 driver (`graphicsApi`, graphics.rs). Apple's systems present Metal, and the GL
+# stack's EGL and window-system bindings have no iOS backend to build against.
 wgpu = { version = "30.0.1", default-features = false, features = ["gles"] }
+
+[target.'cfg(not(any(target_os = "ios", target_os = "visionos")))'.dependencies]
+# HDR's swapchain metadata needs the Vulkan calls; see the same block in
+# crates/horizon-client-render/Cargo.toml.
+horizon-hdr = { path = "../horizon-hdr" }
 
 [features]
 default = ["audio", "controllers"]

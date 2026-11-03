@@ -1873,12 +1873,12 @@ async fn open_backend(
         memory_hints: wgpu::MemoryHints::MemoryUsage,
         ..Default::default()
     };
-    #[cfg(not(target_os = "macos"))]
+    #[cfg(not(any(target_os = "macos", target_os = "ios", target_os = "visionos")))]
     let opened = match info.backend {
         wgpu::Backend::Vulkan => horizon_hdr::open_vulkan_device(&adapter, &desc),
         _ => None,
     };
-    #[cfg(target_os = "macos")]
+    #[cfg(any(target_os = "macos", target_os = "ios", target_os = "visionos"))]
     let opened = None;
     let opened = match opened {
         Some(opened) => opened,
@@ -5410,6 +5410,7 @@ impl Renderer {
         if device_lost.load(std::sync::atomic::Ordering::Relaxed) {
             return Err("the graphics device was lost".into());
         }
+        #[cfg(not(any(target_os = "ios", target_os = "visionos")))]
         if let Some(hdr) = hdr {
             horizon_hdr::set_metadata(
                 device,
@@ -5419,6 +5420,8 @@ impl Renderer {
                 hdr.black,
             );
         }
+        #[cfg(any(target_os = "ios", target_os = "visionos"))]
+        let _ = hdr;
         Ok(())
     }
     /// Configures the window surface again. One that fails is still the one
@@ -5454,6 +5457,9 @@ impl Renderer {
         }
     }
     fn send_hdr_metadata(&self) {
+        // Nothing to hand the swapchain without the Vulkan metadata calls (see the
+        // `horizon-hdr` dependency's condition).
+        #[cfg(not(any(target_os = "ios", target_os = "visionos")))]
         if let (Some(surface), Some(hdr)) = (&self.surface, &self.hdr) {
             horizon_hdr::set_metadata(
                 &self.device,

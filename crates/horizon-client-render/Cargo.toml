@@ -16,7 +16,6 @@ horizon-client-core = { path = "../horizon-client-core" }
 horizon-client-input = { path = "../horizon-client-input" }
 horizon-command = { path = "../horizon-command" }
 horizon-core = { path = "../horizon-core" }
-horizon-hdr = { path = "../horizon-hdr" }
 horizon-items = { path = "../horizon-items" }
 # The narrator option's status and whether the narrator is there (Options.narrator).
 horizon-narrator = { path = "../horizon-narrator" }
@@ -68,6 +67,12 @@ wgpu = { version = "30.0.1", default-features = false, features = ["dx12"] }
 
 [target.'cfg(not(any(target_os = "macos", target_os = "ios", target_os = "visionos")))'.dependencies]
 wgpu = { version = "30.0.1", default-features = false, features = ["gles"] }
+
+[target.'cfg(not(any(target_os = "ios", target_os = "visionos")))'.dependencies]
+# HDR's swapchain metadata: the Vulkan calls the crates that forbid unsafe code can't make.
+# Apple's phones have no Vulkan, and wgpu-hal leaves ash out of them, so there is nothing here
+# for the crate to build against (`gfx.rs` keeps its HDR calls on the same condition).
+horizon-hdr = { path = "../horizon-hdr" }
 
 [features]
 # Sound output: horizon-client's `audio` feature.

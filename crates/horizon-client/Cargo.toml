@@ -24,7 +24,6 @@ horizon-core = { path = "../horizon-core" }
 horizon-optifine = { path = "../horizon-optifine" }
 # The server thread ahead of the workers (MinecraftServer.spin's Thread.setPriority).
 horizon-threads = { path = "../horizon-threads" }
-horizon-hdr = { path = "../horizon-hdr" }
 horizon-world = { path = "../horizon-world" }
 horizon-protocol = { path = "../horizon-protocol" }
 # server.properties, eula.txt and the user lists, shared with horizon-server.
@@ -102,6 +101,11 @@ objc2-foundation = { version = "0.3", default-features = false, features = ["std
 # DirectX 12 driver (`graphicsApi`, graphics.rs). Apple's systems present Metal, and the GL
 # stack's EGL and window-system bindings have no iOS backend to build against.
 wgpu = { version = "30.0.1", default-features = false, features = ["gles"] }
+
+[target.'cfg(not(any(target_os = "ios", target_os = "visionos")))'.dependencies]
+# HDR's swapchain metadata needs the Vulkan calls; see the same block in
+# crates/horizon-client-render/Cargo.toml.
+horizon-hdr = { path = "../horizon-hdr" }
 
 [target.'cfg(windows)'.build-dependencies]
 # The icon resource in the .exe (build.rs).
