@@ -44,7 +44,7 @@ fi
 
 rm -f "$out/Horizon.ipa"
 # No resource forks or extended attributes: they would land as ._ files inside the bundle.
-(cd "$staging" && ditto -c -k --noscancrk --norsrc --noextattr --noqtn Payload "$out/Horizon.ipa")
+(cd "$staging" && ditto -c -k --norsrc --noextattr --noqtn --keepParent Payload "$out/Horizon.ipa")
 unzip -l "$out/Horizon.ipa" | grep -q 'Payload/Horizon.app/Info.plist'
 if [[ -n "${IOS_SIGN_IDENTITY:-}" ]]; then
   echo "Packaged $out/Horizon.ipa, signed: installs on the devices in the profile"
