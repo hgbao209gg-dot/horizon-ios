@@ -47,6 +47,10 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           shared-key: ios-arm64
+          # Keep what a failed build compiled: while the port is finding its platform gates, every
+          # push fails somewhere new, and a cache that only saves on success would rebuild all
+          # forty-one crates each time.
+          cache-on-failure: true
       # No default features: `controllers` is gilrs, which has no iOS backend. Audio is cpal's
       # CoreAudio, which does.
       - name: Build the client
